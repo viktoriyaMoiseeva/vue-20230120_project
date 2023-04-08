@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import MeetupsList from '../components/MeetupsList.vue';
 import MeetupsCalendar from '../components/MeetupsCalendar.vue';
 import UiRadioGroup from '../components/UiRadioGroup.vue';
@@ -61,6 +61,8 @@ import UiInput from '../components/UiInput.vue';
 import UiTransitionGroupFade from '../components/UiTransitionGroupFade.vue';
 import { useMeetupsFetch } from '../composables/useMeetupsFetch.js';
 import { useMeetupsFilter } from '../composables/useMeetupsFilter.js';
+import { useQuerySync } from '../composables/useQuerySync.js';
+import { useRoute } from 'vue-router';
 
 export default {
   name: 'PageMeetups',
@@ -84,15 +86,7 @@ export default {
 
     const view = ref('list');
 
-    /*
-       TODO: Добавить синхронизацию фильтров и view с одноимёнными query параметрами
-             - Измерение параметров фильтрации и view должны изменять query параметры маршрута
-               - date, participation, search, view
-             - При значениях по умолчанию (all, list) query параметр добавляться не должен
-             - Изменение query параметров маршрута должно приводить к изменению
-             - Вынесите эту логику в универсальный компосабл useQuerySync
-             - Будущая задача composition/useQuerySync
-     */
+    const route = useRoute();
 
     const viewComponent = computed(() => {
       const viewToComponents = {
@@ -100,6 +94,20 @@ export default {
         calendar: MeetupsCalendar,
       };
       return viewToComponents[view.value];
+    });
+
+    useQuerySync(view, filter);
+
+    onMounted(() => {
+      if (route.query.view === 'calendar') {
+        view.value = 'calendar';
+      }
+
+      Object.keys(filter.value).forEach((filterKey) => {
+        if (route.query[filterKey]) {
+          filter.value[filterKey] = route.query[filterKey];
+        }
+      });
     });
 
     return {

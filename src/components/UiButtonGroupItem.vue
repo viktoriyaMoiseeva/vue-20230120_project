@@ -1,12 +1,41 @@
 <template>
-  <div>Task 11-communication/01-UiButtonGroup | 11-provide-inject/01-UiButtonGroup</div>
+  <button
+    class="button-group__button"
+    :class="{ 'button-group__button_active': isActiveClass }"
+    type="button"
+    aria-selected="false"
+    @click="update"
+  >
+    <slot />
+  </button>
 </template>
 
 <script>
-// TODO: Task 11-communication/01-UiButtonGroup | 11-provide-inject/01-UiButtonGroup
-
 export default {
   name: 'UiButtonGroupItem',
+
+  props: {
+    value: {
+      required: true,
+    },
+  },
+
+  inject: {
+    injectedValue: 'value',
+    updateInjectedValue: 'update',
+  },
+
+  computed: {
+    isActiveClass() {
+      return this.injectedValue === this.value;
+    },
+  },
+
+  methods: {
+    update() {
+      this.updateInjectedValue(this.value);
+    },
+  },
 };
 </script>
 

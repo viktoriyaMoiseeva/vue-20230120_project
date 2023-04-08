@@ -35,7 +35,7 @@ export function createProgress({ container, router } = {}) {
 
     router.onError(() => {
       progressBar.fail();
-    })
+    });
   }
 
   return progressBar;

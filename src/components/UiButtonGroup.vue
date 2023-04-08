@@ -1,10 +1,28 @@
 <template>
-  <div>Task 11-communication/01-UiButtonGroup | 11-provide-inject/01-UiButtonGroup</div>
+  <div class="button-group" role="group">
+    <slot />
+  </div>
 </template>
 
 <script>
+import { computed } from 'vue';
 export default {
   name: 'UiButtonGroup',
+
+  props: {
+    modelValue: {
+      required: true,
+    },
+  },
+
+  provide() {
+    return {
+      value: computed(() => this.modelValue),
+      update: (value) => this.$emit('update:modelValue', value),
+    };
+  },
+
+  emits: ['update:modelValue'],
 };
 </script>
 
