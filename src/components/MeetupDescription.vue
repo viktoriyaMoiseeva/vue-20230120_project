@@ -1,12 +1,17 @@
 <template>
-  <div>Task 02-components/01-MeetupDescription</div>
+  <p class="meetup-description">{{ description }}</p>
 </template>
 
 <script>
-// TODO: Task 02-components/01-MeetupDescription
-
 export default {
   name: 'MeetupDescription',
+
+  props: {
+    description: {
+      type: String,
+      default: '',
+    },
+  },
 };
 </script>
 

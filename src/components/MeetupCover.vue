@@ -1,18 +1,29 @@
 <template>
-  <div>Task 02-components/03-MeetupCover</div>
+  <div class="meetup-cover" :style="image ? `--bg-url: url('${image}')` : ''">
+    <h1 class="meetup-cover__title">{{ title }}</h1>
+  </div>
 </template>
 
 <script>
-// TODO: Task 02-components/03-MeetupCover
-
 export default {
   name: 'MeetupCover',
+
+  props: {
+    title: {
+      type: String,
+      default: '',
+    },
+
+    image: {
+      type: String,
+      default: '',
+    },
+  },
 };
 </script>
 
 <style scoped>
 /* _meetup-cover.css */
-/* TODO: добавить v-bind в css */
 
 .meetup-cover {
   --bg-url: var(--default-cover);

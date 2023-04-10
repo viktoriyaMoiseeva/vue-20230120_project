@@ -3,8 +3,8 @@
     <MeetupView v-if="meetup" :meetup="meetup">
       <UiTabs>
         <template #tabs>
-          <UiTab :to="{ name: 'meetup.description' }">Описание</UiTab>
-          <UiTab :to="{ name: 'meetup.agenda' }">Программа</UiTab>
+          <UiTab :to="{ name: 'meetup.description', params: { meetupId: meetupId } }">Описание</UiTab>
+          <UiTab :to="{ name: 'meetup.agenda', params: { meetupId: meetupId } }">Программа</UiTab>
         </template>
         <template #default>
           <RouterView :meetup="meetup" />
@@ -30,6 +30,7 @@ import UiAlert from '../components/UiAlert.vue';
 import UiTabs from '../components/UiTabs.vue';
 import UiTab from '../components/UiTab.vue';
 import { getMeetup } from '../api/meetupsApi.js';
+import { onMounted } from '@vue/runtime-core';
 
 export default {
   name: 'PageMeetup',
@@ -47,6 +48,7 @@ export default {
     if (result.success) {
       return (vm) => {
         vm.setMeetup(result.data);
+        document.title = `${result.data.title} | Meetups`;
       };
     } else {
       return { name: 'meetups' };
@@ -61,7 +63,6 @@ export default {
   },
 
   setup(props) {
-    // TODO: Установить <title> - "<название митапа> | Meetups"
     const meetup = ref(null);
     const error = ref(null);
 

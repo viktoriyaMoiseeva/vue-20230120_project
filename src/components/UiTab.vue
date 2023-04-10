@@ -1,12 +1,24 @@
 <template>
-  <div>Task UiTabs</div>
+  <router-link :to="to" class="tabs__tab" :exact-active-class="'tabs__tab_active'" role="tab">
+    <slot />
+  </router-link>
 </template>
 
 <script>
-// TODO: Task UiTabs
 
 export default {
   name: 'UiTab',
+
+  props: {
+    to: {
+      type: [String, Object],
+      required: true,
+    },
+
+    params: {
+      type: Object,
+    },
+  },
 };
 </script>
 

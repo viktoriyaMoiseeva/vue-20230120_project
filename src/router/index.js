@@ -14,6 +14,9 @@ export const routes = [
     path: '/',
     name: 'index',
     component: () => import('../views/PageMeetups.vue'),
+    meta: {
+      title: 'Meetups',
+    },
   },
   {
     path: '/meetups',
