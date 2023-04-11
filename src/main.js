@@ -10,12 +10,14 @@ import { createPinia } from 'pinia';
 import { createToaster } from './plugins/toaster/index.js';
 import { createProgress } from './plugins/progress/index.js';
 const app = createApp(App);
+const pinia = createPinia();
+
 
 app.config.unwrapInjectedRef = true;
 
 app
   .use(router)
-  .use(createPinia())
+  .use(pinia)
   .use(
     createToaster({
       container: '#toaster',

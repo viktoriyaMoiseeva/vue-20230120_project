@@ -14,9 +14,6 @@ export const routes = [
     path: '/',
     name: 'index',
     component: () => import('../views/PageMeetups.vue'),
-    meta: {
-      title: 'Meetups',
-    },
   },
   {
     path: '/meetups',
@@ -49,18 +46,43 @@ export const routes = [
       },
     ],
   },
-  // TODO: Task 05-vue-router/01-AuthPages
+  {
+    path: '/login',
+    name: 'login',
+    meta: {
+      requireGuest: true,
+      title: 'Вход | Meetups',
+    },
+    component: () => import('../views/PageLogin.vue'),
+  },
+  {
+    path: '/register',
+    name: 'register',
+    meta: {
+      requireGuest: true,
+      title: 'Регистрация | Meetups',
+    },
+    component: () => import('../views/PageRegister.vue'),
+  },
+
   {
     path: '/meetups/create',
-    // TODO: Добавить страницу создания митапа
+    name: 'meetups-create',
+    meta: {
+      requireAuth: true,
+    },
+    component: () => import('../views/PageCreateMeetup.vue'),
   },
   {
     path: '/meetups/:meetupId(\\d+)/edit',
-    // TODO: Добавить страницу редактирования митапа
+    meta: {
+      requireAuth: true,
+    },
+    component: () => import('../views/PageEditMeetup.vue'),
   },
-  // TODO: Task 05-vue-router/02-PageNotFound
+
   {
-    path: '/:unknownPath(.*)',
+    path: '/:pathMatch(.*)*',
     component: () => import('../views/PageNotFound.vue'),
   },
 ];
@@ -69,6 +91,10 @@ export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
   scrollBehavior,
+});
+
+router.beforeEach(to => {
+  document.title = to.meta.title || 'Meetups';
 });
 
 router.beforeEach(authGuard);
