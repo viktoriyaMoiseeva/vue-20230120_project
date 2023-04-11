@@ -93,7 +93,7 @@ export const router = createRouter({
   scrollBehavior,
 });
 
-router.beforeEach(to => {
+router.beforeEach((to) => {
   document.title = to.meta.title || 'Meetups';
 });
 

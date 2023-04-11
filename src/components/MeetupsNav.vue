@@ -12,8 +12,12 @@
 
     <!-- Ссылки авторизованного пользователя -->
     <template v-else>
-      <RouterLink :to="{ name: 'meetups', query: { participation: 'attending' }}" class="nav__link"> Мои митапы </RouterLink>
-      <RouterLink :to="{ name: 'meetups', query: { participation: 'organizing' }}" class="nav__link"> Организуемые митапы </RouterLink>
+      <RouterLink :to="{ name: 'meetups', query: { participation: 'attending' } }" class="nav__link">
+        Мои митапы
+      </RouterLink>
+      <RouterLink :to="{ name: 'meetups', query: { participation: 'organizing' } }" class="nav__link">
+        Организуемые митапы
+      </RouterLink>
       <RouterLink :to="{ name: 'meetups-create' }" class="nav__link">Создать митап</RouterLink>
     </template>
 
@@ -24,21 +28,20 @@
 </template>
 
 <script>
-
 import { useAuthStore } from '../stores/useAuthStore.js';
-import {storeToRefs} from "pinia";
+import { storeToRefs } from 'pinia';
 
 export default {
   name: 'MeetupsNav',
 
-    setup() {
-        const authStore = useAuthStore();
-        const { isAuthenticated } = storeToRefs(authStore);
+  setup() {
+    const authStore = useAuthStore();
+    const { isAuthenticated } = storeToRefs(authStore);
 
-        return {
-            isAuthenticated
-        }
-    }
+    return {
+      isAuthenticated,
+    };
+  },
 };
 </script>
 

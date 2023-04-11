@@ -5,7 +5,7 @@ import { httpClient } from './httpClient/httpClient.js';
  * @returns {Promise<ResultContainer<User>>}
  */
 export function getUser() {
-  return httpClient.get('/auth/user')
+  return httpClient.get('/auth/user');
 }
 
 /**

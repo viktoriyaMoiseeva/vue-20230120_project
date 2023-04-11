@@ -7,7 +7,6 @@
 </template>
 
 <script>
-
 import MeetupAgendaItem from './MeetupAgendaItem.vue';
 
 export default {

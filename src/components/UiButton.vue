@@ -1,52 +1,43 @@
 <template>
-  <component
-    v-bind="$attrs"
-    :is="tag"
-    class="button"
-    :class="classArr"
-    :type="tag === 'button' ? type : null"
-  >
-    <slot/>
+  <component v-bind="$attrs" :is="tag" class="button" :class="classArr" :type="tag === 'button' ? type : null">
+    <slot />
   </component>
 </template>
 
 <script>
-    export default {
-        name: 'UiButton',
-        inheritAttrs: false,
+export default {
+  name: 'UiButton',
+  inheritAttrs: false,
 
-        props: {
-            tag: {
-                type: [String, Object, Function],
-                default: 'button'
-            },
+  props: {
+    tag: {
+      type: [String, Object, Function],
+      default: 'button',
+    },
 
-            variant: {
-                type: String,
-                default: 'secondary',
-                validator(value) {
-                    return ['primary', 'secondary', 'danger'].includes(value)
-                }
-            },
+    variant: {
+      type: String,
+      default: 'secondary',
+      validator(value) {
+        return ['primary', 'secondary', 'danger'].includes(value);
+      },
+    },
 
-            type: {
-                type: String,
-                default: 'button',
-                validator(value) {
-                    return ['button', 'submit'].includes(value)
-                }
-            }
-        },
+    type: {
+      type: String,
+      default: 'button',
+      validator(value) {
+        return ['button', 'submit'].includes(value);
+      },
+    },
+  },
 
-        computed: {
-            classArr() {
-                return [
-                    `button_${this.variant}`,
-                    this.$attrs.block ? 'button_block' : ''
-                ]
-            }
-        }
-    };
+  computed: {
+    classArr() {
+      return [`button_${this.variant}`, this.$attrs.block ? 'button_block' : ''];
+    },
+  },
+};
 </script>
 
 <style scoped>

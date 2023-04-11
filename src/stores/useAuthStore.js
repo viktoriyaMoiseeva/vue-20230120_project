@@ -1,11 +1,10 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import { getUser, loginUser, registerUser } from "../api/authApi";
+import { getUser, loginUser, registerUser } from '../api/authApi';
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null);
   const isAuthenticated = computed(() => !!user.value);
-
 
   const setUser = (value) => {
     user.value = value;
@@ -19,7 +18,7 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = await loginUser(email, password);
   };
 
-  const register = async(data) => {
+  const register = async (data) => {
     user.value = await registerUser(data);
   };
 
@@ -29,6 +28,6 @@ export const useAuthStore = defineStore('auth', () => {
     setUser,
     getUser,
     login,
-    register
+    register,
   };
 });

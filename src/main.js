@@ -12,7 +12,6 @@ import { createProgress } from './plugins/progress/index.js';
 const app = createApp(App);
 const pinia = createPinia();
 
-
 app.config.unwrapInjectedRef = true;
 
 app
