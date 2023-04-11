@@ -1,5 +1,4 @@
 /** @implements {import('vue-router').NavigationGuard} */
-import { storeToRefs } from "pinia";
 import { useAuthStore } from '../stores/useAuthStore.js';
 
 
