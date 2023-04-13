@@ -23,7 +23,7 @@ export function loginUser(email, password) {
  * @param {Object} user
  * @returns {Promise<ResultContainer<User>>}
  */
-export function registerUser(user) {
+export function registerUser(fullname, email, password) {
   return httpClient.post('/auth/register', { fullname, email, password });
 }
 
