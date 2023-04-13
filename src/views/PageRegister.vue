@@ -33,7 +33,7 @@
 import { TOASTER_KEY } from '../plugins/toaster/index.js';
 import { registerUser } from '../api/authApi';
 import { ref, inject } from 'vue';
-import {useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import UiFormGroup from '../components/UiFormGroup.vue';
 import UiInput from '../components/UiInput.vue';
 import UiCheckbox from '../components/UiCheckbox.vue';
@@ -76,14 +76,14 @@ export default {
     const handleSubmit = async () => {
       const validationError = validate();
       if (validationError) {
-          toaster.error(validationError);
+        toaster.error(validationError);
       }
 
-        const result = await registerUser(fullname.value, email.value, password.value);
-        if (result.success) {
-            router.push({name: 'login'});
-            toaster.success('Регистрация выполнена успешно');
-        } else toaster.error(result.error.message);
+      const result = await registerUser(fullname.value, email.value, password.value);
+      if (result.success) {
+        router.push({ name: 'login' });
+        toaster.success('Регистрация выполнена успешно');
+      } else toaster.error(result.error.message);
     };
 
     return {

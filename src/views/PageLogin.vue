@@ -52,17 +52,17 @@ export default {
     const router = useRouter();
 
     const handleSubmit = async () => {
-       await authStore.login(email.value, password.value);
-       if (authStore.isAuthenticated) {
-           toaster.success('Авторизация прошла успешно');
-           router.push({path: route.query.from ?? '/'});
-       } else toaster.error('Неверные учётные данные...');
+      await authStore.login(email.value, password.value);
+      if (authStore.isAuthenticated) {
+        toaster.success('Авторизация прошла успешно');
+        router.push({ path: route.query.from ?? '/' });
+      } else toaster.error('Неверные учётные данные...');
     };
 
     return {
       email,
       password,
-      handleSubmit
+      handleSubmit,
     };
   },
 };

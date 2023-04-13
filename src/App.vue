@@ -18,6 +18,10 @@
 import LayoutBase from './components/LayoutBase.vue';
 import UiAlert from './components/UiAlert.vue';
 import { httpClient } from './api/httpClient/httpClient.js';
+import { useAuthStore } from './stores/useAuthStore';
+import { deleteUserFromLocalStorage } from './services/authService';
+import { TOASTER_KEY } from './plugins/toaster/index.js';
+import { inject } from 'vue';
 
 export default {
   name: 'App',
@@ -28,20 +32,30 @@ export default {
   },
 
   setup() {
-    // TODO: Установить <title> - "Meetups"
+    const toaster = inject(TOASTER_KEY);
 
-    // TODO: для авторизованных пользователей - запросить новые данные пользователя для актуализации и проверки актуальности
+    const authStore = useAuthStore();
+    if (authStore.isAuthenticated) {
+      authStore.getCurrentUser();
+    }
 
     httpClient.onUnauthenticated(() => {
-      // TODO: сессия пользователя больше не валидна - нужна обработка потери авторизации
+      deleteUserFromLocalStorage();
     });
 
     httpClient.onNetworkError(() => {
-      // TODO: проблема с сетью, стоит вывести тост пользователю
+      toaster.error('Проблема с сетью');
     });
 
-    // TODO: обработка глобальных ошибок - необработанные исключения можно залогировать и вывести тост
-    // TODO: глобальные ошибки можно поймать событиями "error" и "unhandledrejection"
+    window.addEventListener('error', (event) => {
+      console.error(event);
+      toaster.error(event.message);
+    });
+
+    window.addEventListener('unhandledrejection', (event) => {
+      console.warn(`UNHANDLED PROMISE REJECTION: ${event.reason}`);
+      toaster.error(event.reason);
+    });
   },
 };
 </script>

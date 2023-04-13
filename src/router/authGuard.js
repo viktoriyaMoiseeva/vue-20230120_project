@@ -1,5 +1,5 @@
 /** @implements {import('vue-router').NavigationGuard} */
-import { useAuthStore } from '../stores/useAuthStore.js';
+import { useAuthStore } from '../stores/useAuthStore';
 
 export async function authGuard(to) {
   const authStore = useAuthStore();

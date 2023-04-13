@@ -1,23 +1,29 @@
-import {defineStore} from 'pinia';
-import {computed, ref} from 'vue';
-import {getUser, loginUser} from '../api/authApi';
+import { defineStore } from 'pinia';
+import { computed, ref } from 'vue';
+import { loginUser, getUser } from '../api/authApi';
+import { setUserToLocalStorage, getUserFromLocalStorage } from '../services/authService';
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref(null);
+  const user = ref(getUserFromLocalStorage || null);
   const isAuthenticated = computed(() => !!user.value);
 
   const setUser = (value) => {
     user.value = value;
   };
 
-  // const getUser = async () => {
-  //   const result = await getUser();
-  // };
-
   const login = async (email, password) => {
     const result = await loginUser(email, password);
     if (result.success) {
-      setUser(result.data)
+      setUser(result.data);
+      setUserToLocalStorage(result.data);
+    }
+  };
+
+  const getCurrentUser = async () => {
+    const result = await getUser();
+    if (result.success) {
+      setUser(result.data);
+      setUserToLocalStorage(result.data);
     }
   };
 
@@ -25,7 +31,7 @@ export const useAuthStore = defineStore('auth', () => {
     user,
     isAuthenticated,
     setUser,
-    getUser,
+    getCurrentUser,
     login,
   };
 });
