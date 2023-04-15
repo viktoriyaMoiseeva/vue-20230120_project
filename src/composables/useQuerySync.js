@@ -1,9 +1,10 @@
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { watch, ref } from 'vue';
 import { klona } from 'klona';
 
 export function useQuerySync(view, filter) {
   const router = useRouter();
+  const route = useRoute();
   const query = ref({});
 
   watch(view, (current, previous) => {
@@ -20,7 +21,16 @@ export function useQuerySync(view, filter) {
   watch(
     () => filter.value.participation,
     (current, previous) => {
-      query.value.participation = current;
+      if (current !== 'all') {
+        query.value.participation = current;
+      }
+    },
+  );
+
+  watch(
+    () => route.query.participation,
+    (current, previous) => {
+        filter.value.participation = current ?? 'all';
     },
   );
 
