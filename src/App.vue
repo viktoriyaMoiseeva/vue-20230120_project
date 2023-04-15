@@ -41,6 +41,7 @@ export default {
 
     httpClient.onUnauthenticated(() => {
       deleteUserFromLocalStorage();
+      location.reload();
     });
 
     httpClient.onNetworkError(() => {

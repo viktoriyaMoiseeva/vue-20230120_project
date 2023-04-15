@@ -1,10 +1,14 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 import { loginUser, getUser } from '../api/authApi';
-import { setUserToLocalStorage, getUserFromLocalStorage } from '../services/authService';
+import {
+  setUserToLocalStorage,
+  getUserFromLocalStorage,
+  deleteUserFromLocalStorage,
+} from '../services/authService';
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref(getUserFromLocalStorage || null);
+  const user = ref(getUserFromLocalStorage());
   const isAuthenticated = computed(() => !!user.value);
 
   const setUser = (value) => {
