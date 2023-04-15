@@ -12,10 +12,10 @@
 
     <!-- Ссылки авторизованного пользователя -->
     <template v-else>
-      <RouterLink :to="{ name: 'meetups', query: { participation: 'attending' } }" class="nav__link">
+      <RouterLink :to="{ name: 'meetups', query: { ...$route.query, participation: 'attending' } }" class="nav__link">
         Мои митапы
       </RouterLink>
-      <RouterLink :to="{ name: 'meetups', query: { participation: 'organizing' } }" class="nav__link">
+      <RouterLink :to="{ name: 'meetups', query: { ...$route.query, participation: 'organizing' } }" class="nav__link">
         Организуемые митапы
       </RouterLink>
       <RouterLink :to="{ name: 'meetups-create' }" class="nav__link">Создать митап</RouterLink>
