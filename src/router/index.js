@@ -70,13 +70,19 @@ export const routes = [
     name: 'meetups-create',
     meta: {
       requireAuth: true,
+      title: 'Создание митапа | Meetups',
     },
     component: () => import('../views/PageCreateMeetup.vue'),
   },
   {
     path: '/meetups/:meetupId(\\d+)/edit',
+    name: 'meetup-edit',
+    props: (to) => ({
+      meetupId: +to.params.meetupId,
+    }),
     meta: {
       requireAuth: true,
+      title: 'Редактирование митапа | Meetups',
     },
     component: () => import('../views/PageEditMeetup.vue'),
   },

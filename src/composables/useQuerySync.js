@@ -30,7 +30,7 @@ export function useQuerySync(view, filter) {
   watch(
     () => route.query.participation,
     (current, previous) => {
-        filter.value.participation = current ?? 'all';
+      filter.value.participation = current ?? 'all';
     },
   );
 

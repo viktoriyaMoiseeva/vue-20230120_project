@@ -62,11 +62,10 @@ import MeetupInfo from './MeetupInfo.vue';
 import UiContainer from './UiContainer.vue';
 import UiButton from './UiButton.vue';
 import { useAuthStore } from '../stores/useAuthStore';
-import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router';
 import { useApi } from '../composables/useApi';
 import { attendMeetup, leaveMeetup, deleteMeetup } from '../api/meetupsApi';
-import { ref } from "vue";
-
+import { ref } from 'vue';
 
 export default {
   name: 'MeetupView',
@@ -86,39 +85,42 @@ export default {
   },
 
   setup(props) {
-      const authStore = useAuthStore();
-      const isAuthenticated = authStore.isAuthenticated;
-      const disabled = ref(false);
-      const attending = ref(!!props.meetup.attending);
-      const router = useRouter();
+    const authStore = useAuthStore();
+    const isAuthenticated = authStore.isAuthenticated;
+    const disabled = ref(false);
+    const attending = ref(!!props.meetup.attending);
+    const router = useRouter();
 
-      const handleDeleteMeetup = async () => {
-          const { request, result, isLoading } = useApi(deleteMeetup, { showProgress: true, successToast: 'Митап удалён'});
-          disabled.value = isLoading.value;
-          await request(props.meetup.id);
-          if (result.value.success) {
-              router.push({ name: 'meetups' });
-          }
-          disabled.value = isLoading.value;
-      };
-
-      const handleAttendMeetup = async () => {
-          const { request, result, isLoading } = useApi(attending.value ? leaveMeetup : attendMeetup, { showProgress: true, successToast: 'Сохранено'});
-          disabled.value = isLoading.value;
-          await request(props.meetup.id);
-          if (result.value.success) {
-              attending.value = !attending.value;
-          }
-          disabled.value = isLoading.value;
-      };
-
-      return {
-          isAuthenticated,
-          handleDeleteMeetup,
-          handleAttendMeetup,
-          attending,
-          disabled
+    const handleDeleteMeetup = async () => {
+      const { request, result, isLoading } = useApi(deleteMeetup, { showProgress: true, successToast: 'Митап удалён' });
+      disabled.value = isLoading.value;
+      await request(props.meetup.id);
+      if (result.value.success) {
+        router.push({ name: 'meetups' });
       }
+      disabled.value = isLoading.value;
+    };
+
+    const handleAttendMeetup = async () => {
+      const { request, result, isLoading } = useApi(attending.value ? leaveMeetup : attendMeetup, {
+        showProgress: true,
+        successToast: 'Сохранено',
+      });
+      disabled.value = isLoading.value;
+      await request(props.meetup.id);
+      if (result.value.success) {
+        attending.value = !attending.value;
+      }
+      disabled.value = isLoading.value;
+    };
+
+    return {
+      isAuthenticated,
+      handleDeleteMeetup,
+      handleAttendMeetup,
+      attending,
+      disabled,
+    };
   },
 };
 </script>

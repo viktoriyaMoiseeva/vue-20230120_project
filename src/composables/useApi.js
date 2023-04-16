@@ -1,7 +1,7 @@
 import { ref } from 'vue';
 import { createProgress } from '../plugins/progress/index.js';
 import { createToaster } from '../plugins/toaster/index.js';
-import { router } from "../router";
+import { router } from '../router';
 
 /**
  * @template T
@@ -34,8 +34,8 @@ import { router } from "../router";
 export function useApi(apiFunc, { showProgress = false, successToast = false, errorToast = false } = {}) {
   const result = ref(null);
   const isLoading = ref(false);
-  const progress = createProgress({container: '#progress', router});
-  const toaster = createToaster({container: '#toaster'});
+  const progress = createProgress({ container: '#progress', router });
+  const toaster = createToaster({ container: '#toaster' });
 
   const request = async (...args) => {
     isLoading.value = true;
@@ -53,14 +53,13 @@ export function useApi(apiFunc, { showProgress = false, successToast = false, er
 
   const showToast = () => {
     if (result.value.success && successToast) {
-      toaster.success(typeof successToast === 'string' ? successToast : result.value.success)
+      toaster.success(typeof successToast === 'string' ? successToast : result.value.success);
     }
 
     if (result.value.error && errorToast) {
-      toaster.error(typeof errorToast === 'string' ? errorToast : result.value.error)
+      toaster.error(typeof errorToast === 'string' ? errorToast : result.value.error);
     }
   };
-
 
   return {
     request,

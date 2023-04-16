@@ -50,7 +50,7 @@ export function deleteMeetup(id) {
  * @returns {Promise<ResultContainer<void>>}
  */
 export function attendMeetup(id) {
-  return httpClient.post(`/meetups/${id}/participation`)
+  return httpClient.post(`/meetups/${id}/participation`);
 }
 
 /**
@@ -59,5 +59,5 @@ export function attendMeetup(id) {
  * @returns {Promise<ResultContainer<void>>}
  */
 export function leaveMeetup(id) {
-  return httpClient.delete(`/meetups/${id}/participation`)
+  return httpClient.delete(`/meetups/${id}/participation`);
 }
