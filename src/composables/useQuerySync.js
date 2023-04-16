@@ -21,16 +21,16 @@ export function useQuerySync(view, filter) {
   watch(
     () => filter.value.participation,
     (current, previous) => {
-      if (current !== 'all') {
-        query.value.participation = current;
-      }
+      current !== 'all' ? (query.value.participation = current) : delete query.value.participation;
     },
   );
 
   watch(
     () => route.query.participation,
     (current, previous) => {
-      filter.value.participation = current ?? 'all';
+      if (current !== previous) {
+        filter.value.participation = current ?? 'all';
+      }
     },
   );
 
