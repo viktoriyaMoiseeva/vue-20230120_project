@@ -39,7 +39,6 @@ export default {
 
 <style scoped>
 /* _card.css */
-/* TODO: Добавить v-bind в стили */
 .card {
   display: flex;
   flex-direction: row;
