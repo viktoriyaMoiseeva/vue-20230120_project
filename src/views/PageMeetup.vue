@@ -30,7 +30,6 @@ import UiAlert from '../components/UiAlert.vue';
 import UiTabs from '../components/UiTabs.vue';
 import UiTab from '../components/UiTab.vue';
 import { getMeetup } from '../api/meetupsApi.js';
-import { onMounted } from '@vue/runtime-core';
 
 export default {
   name: 'PageMeetup',
@@ -67,9 +66,6 @@ export default {
     const error = ref(null);
 
     const fetchMeetup = async () => {
-      meetup.value = null;
-      error.value = null;
-
       const result = await getMeetup(props.meetupId);
       if (result.success) {
         meetup.value = result.data;
