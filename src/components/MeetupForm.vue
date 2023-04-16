@@ -89,7 +89,7 @@ export default {
 
     submitText: {
       type: String,
-      default: '',
+      default: 'Сохранить',
     },
   },
 
