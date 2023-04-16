@@ -1,12 +1,84 @@
 <template>
-  <div>Task 06-wrappers/05-UiImageUploader</div>
+  <div class="image-uploader">
+    <label
+      class="image-uploader__preview"
+      :class="{ 'image-uploader__preview-loading': isLoading }"
+      :style="hasImage ? `--bg-url: url('${uploadedImage}')` : ''"
+    >
+      <span class="image-uploader__text">{{ message }}</span>
+      <input
+        :type="!hasImage ? 'file' : ''"
+        accept="image/*"
+        class="image-uploader__input"
+        v-bind="$attrs"
+        @[eventName].prevent="change"
+      />
+    </label>
+  </div>
 </template>
 
 <script>
-// TODO: Task 06-wrappers/05-UiImageUploader
-
 export default {
   name: 'UiImageUploader',
+  inheritAttrs: false,
+
+  props: {
+    preview: {
+      type: String,
+      default: '',
+    },
+
+    uploader: {
+      type: Function,
+    },
+  },
+
+  emits: ['select', 'remove'],
+
+  data() {
+    return {
+      uploadedImage: this.preview,
+      isLoading: false,
+    };
+  },
+
+  computed: {
+    message() {
+      return this.uploadedImage ? 'Удалить изображение' : this.isLoading ? 'Загрузка...' : 'Загрузить изображение';
+    },
+
+    hasImage() {
+      return !!this.uploadedImage;
+    },
+
+    eventName() {
+      return this.uploadedImage ? 'click' : 'change';
+    },
+  },
+
+  methods: {
+    async change(e) {
+      if (this.hasImage) {
+        this.$emit('remove');
+        this.uploadedImage = e.target.value = '';
+      } else if (!!this.uploader) {
+        this.isLoading = true;
+        this.$emit('select', e.target.files[0]);
+        try {
+          const result = await this.uploader(e.target.files[0]);
+          this.uploadedImage = result.image;
+          this.$emit('upload', result);
+        } catch (error) {
+          this.$emit('error', error);
+          this.uploadedImage = e.target.value = '';
+        }
+        this.isLoading = false;
+      } else {
+        this.$emit('select', e.target.files[0]);
+        this.uploadedImage = URL.createObjectURL(e.target.files[0]);
+      }
+    },
+  },
 };
 </script>
 
