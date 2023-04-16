@@ -20,9 +20,9 @@
 </template>
 
 <script>
-import { TOASTER_KEY } from '../plugins/toaster/index.js';
+import { useToaster } from '../plugins/toaster/index.js';
 import { useAuthStore } from '../stores/useAuthStore.js';
-import { ref, inject } from 'vue';
+import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import UiFormGroup from '../components/UiFormGroup.vue';
 import UiLink from '../components/UiLink.vue';
@@ -45,7 +45,7 @@ export default {
 
   setup() {
     const authStore = useAuthStore();
-    const toaster = inject(TOASTER_KEY);
+    const toaster = useToaster();
     const email = ref('');
     const password = ref('');
     const route = useRoute();

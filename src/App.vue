@@ -20,8 +20,7 @@ import UiAlert from './components/UiAlert.vue';
 import { httpClient } from './api/httpClient/httpClient.js';
 import { useAuthStore } from './stores/useAuthStore';
 import { deleteUserFromLocalStorage } from './services/authService';
-import { TOASTER_KEY } from './plugins/toaster/index.js';
-import { inject } from 'vue';
+import { useToaster } from './plugins/toaster/index.js';
 
 export default {
   name: 'App',
@@ -32,7 +31,7 @@ export default {
   },
 
   setup() {
-    const toaster = inject(TOASTER_KEY);
+    const toaster = useToaster();
 
     const authStore = useAuthStore();
     if (authStore.isAuthenticated) {

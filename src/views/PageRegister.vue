@@ -30,9 +30,9 @@
 </template>
 
 <script>
-import { TOASTER_KEY } from '../plugins/toaster/index.js';
+import { useToaster } from '../plugins/toaster/index.js';
 import { registerUser } from '../api/authApi';
-import { ref, inject } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import UiFormGroup from '../components/UiFormGroup.vue';
 import UiInput from '../components/UiInput.vue';
@@ -61,7 +61,7 @@ export default {
     const password = ref('');
     const password2 = ref('');
     const agree = ref(false);
-    const toaster = inject(TOASTER_KEY);
+    const toaster = useToaster();
     const router = useRouter();
 
     const validate = () => {
