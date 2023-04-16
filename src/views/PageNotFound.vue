@@ -17,11 +17,7 @@ export default {
 
   components: {
     UiContainer,
-  },
-
-  setup() {
-    // TODO: <title> "Страница не найдена | Meetups"
-  },
+  }
 };
 </script>
 

@@ -64,7 +64,6 @@ export const routes = [
     },
     component: () => import('../views/PageRegister.vue'),
   },
-
   {
     path: '/meetups/create',
     name: 'meetups-create',
@@ -86,10 +85,12 @@ export const routes = [
     },
     component: () => import('../views/PageEditMeetup.vue'),
   },
-
   {
     path: '/:pathMatch(.*)*',
     component: () => import('../views/PageNotFound.vue'),
+    meta: {
+      title: 'Страница не найдена | Meetups',
+    },
   },
 ];
 
