@@ -1,12 +1,87 @@
 <template>
-  <div>Task 07-forms/04-GeneratedForm</div>
+  <fieldset class="agenda-item-form">
+    <button type="button" class="agenda-item-form__remove-button" @click="$emit('remove')">
+      <UiIcon icon="trash" />
+    </button>
+
+    <UiFormGroup>
+      <UiDropdown title="Тип" :options="$options.agendaItemOptions" name="type" v-model="localAgendaItem.type" />
+    </UiFormGroup>
+
+    <div class="agenda-item-form__row">
+      <div class="agenda-item-form__col">
+        <UiFormGroup label="Начало">
+          <UiInput v-model="localAgendaItem.startsAt" type="time" placeholder="00:00" name="startsAt" />
+        </UiFormGroup>
+      </div>
+      <div class="agenda-item-form__col">
+        <UiFormGroup label="Окончание">
+          <UiInput v-model="localAgendaItem.endsAt" type="time" placeholder="00:00" name="endsAt" />
+        </UiFormGroup>
+      </div>
+    </div>
+
+    <UiFormGroup v-for="(item, key) in $options.agendaItemFormSchemas[localAgendaItem.type]" :label="item.label">
+      <component :is="item.component" :name="key" v-bind="item.props" v-model="localAgendaItem[key]" />
+    </UiFormGroup>
+  </fieldset>
 </template>
 
 <script>
-// TODO: Task 07-forms/04-GeneratedForm
+import { agendaItemFormSchemas, agendaItemOptions } from '../services/meetupService';
+import UiIcon from './UiIcon.vue';
+import UiFormGroup from './UiFormGroup.vue';
+import UiInput from './UiInput.vue';
+import UiDropdown from './UiDropdown.vue';
 
 export default {
   name: 'MeetupAgendaItemForm',
+  components: { UiIcon, UiFormGroup, UiInput, UiDropdown },
+
+  agendaItemOptions,
+  agendaItemFormSchemas,
+
+  props: {
+    agendaItem: {
+      type: Object,
+      required: true,
+    },
+  },
+  emits: ['remove', 'update:agendaItem'],
+
+  data() {
+    return {
+      localAgendaItem: { ...this.agendaItem },
+    };
+  },
+
+  watch: {
+    localAgendaItem: {
+      deep: true,
+      handler() {
+        this.$emit('update:agendaItem', { ...this.localAgendaItem });
+      },
+    },
+
+    'localAgendaItem.startsAt': {
+      handler(newVal, oldVal) {
+        const endsAt = new Date('1970-01-01T' + this.localAgendaItem.endsAt);
+        const oldTime = new Date('1970-01-01T' + oldVal);
+        const newTime = new Date('1970-01-01T' + newVal);
+
+        let difference = endsAt - oldTime;
+        const hours = Math.floor(difference / 1000 / 60 / 60);
+        difference -= hours * 1000 * 60 * 60;
+        const minutes = Math.floor(difference / 1000 / 60);
+        difference -= minutes * 1000 * 60;
+
+        endsAt.setHours(newTime.getHours() + hours);
+        endsAt.setMinutes(newTime.getMinutes() + minutes);
+
+        this.localAgendaItem.endsAt = endsAt.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+      },
+    },
+  },
 };
 </script>
 

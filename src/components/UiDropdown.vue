@@ -1,16 +1,89 @@
 <template>
-  <div>Task 04-vue-cli/04-UiDropdown1</div>
+  <div class="dropdown" :class="{ dropdown_opened: isOpened }">
+    <ui-dropdown-item
+      class="dropdown__toggle"
+      :class="{ dropdown__toggle_icon: hasIcon }"
+      :title="activeItem?.text ?? title"
+      :icon="activeItem?.icon"
+      @click="isOpened = !isOpened"
+    />
+
+    <div class="dropdown__menu" role="listbox" v-show="isOpened">
+      <ui-dropdown-item
+        class="dropdown__item"
+        :class="{ dropdown__item_icon: hasIcon }"
+        v-for="option in options"
+        :title="option.text"
+        :icon="option?.icon"
+        @click="selectOption(option.value)"
+        role="option"
+      />
+    </div>
+
+    <select :value="modelValue" v-show="false" @change="selectOption($event.target.value)">
+      <option v-for="option in options" :value="option.value">
+        {{ option.text }}
+      </option>
+    </select>
+  </div>
 </template>
 
 <script>
-// TODO: Task 04-vue-cli/04-UiDropdown1
+import UiDropdownItem from './UiDropdownItem.vue';
 
 export default {
   name: 'UiDropdown',
+  components: { UiDropdownItem },
+
+  props: {
+    options: {
+      type: Array,
+      default: () => [],
+      required: true,
+    },
+
+    modelValue: {
+      type: String,
+      required: true,
+      default: '',
+    },
+
+    title: {
+      type: String,
+      required: true,
+    },
+  },
+
+  emits: ['update:modelValue'],
+
+  data() {
+    return {
+      isOpened: false,
+    };
+  },
+
+  computed: {
+    activeItem() {
+      if (this.modelValue) {
+        return this.options.find((item) => item.value === this.modelValue);
+      }
+    },
+
+    hasIcon() {
+      return this.options.some((item) => item.icon);
+    },
+  },
+
+  methods: {
+    selectOption(value) {
+      this.$emit('update:modelValue', value);
+      this.isOpened = !this.isOpened;
+    },
+  },
 };
 </script>
 
-<style scoped>
+<style>
 /* _dropdown.css */
 .dropdown {
   position: relative;
