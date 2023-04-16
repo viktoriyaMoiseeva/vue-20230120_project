@@ -9,14 +9,46 @@
         </div>
         <div class="meetup__aside">
           <MeetupInfo :organizer="meetup.organizer" :place="meetup.place" :date="meetup.date" />
-          <!-- TODO: Добавить проверку на аутентификацию и является ли пользователь организатором митапа -->
-          <!-- TODO: Реализовать кнопки (некоторые должны быть ссылками) -->
-          <div class="meetup__aside-buttons">
-            <!-- TODO: Может добавить тут слот? -->
-            <UiButton variant="primary" class="meetup__aside-button">Редактировать</UiButton>
-            <UiButton variant="danger" class="meetup__aside-button">Удалить</UiButton>
-            <UiButton variant="secondary" class="meetup__aside-button">Отменить участие</UiButton>
-            <UiButton variant="primary" class="meetup__aside-button"> Участвовать </UiButton>
+          <div class="meetup__aside-buttons" v-if="isAuthenticated">
+            <UiButton
+              v-if="meetup.organizing"
+              tag="router-link"
+              :to="{ name: 'meetup-edit', params: { meetupId: meetup.id } }"
+              variant="primary"
+              class="meetup__aside-button"
+            >
+              Редактировать
+            </UiButton>
+
+            <UiButton
+              v-if="meetup.organizing"
+              variant="danger"
+              class="meetup__aside-button"
+              @click="handleDeleteMeetup"
+              :disabled="disabled"
+            >
+              Удалить
+            </UiButton>
+
+            <UiButton
+              v-if="attending"
+              variant="secondary"
+              class="meetup__aside-button"
+              @click="handleAttendMeetup"
+              :disabled="disabled"
+            >
+              Отменить участие
+            </UiButton>
+
+            <UiButton
+              v-if="!meetup.organizing && !attending"
+              variant="primary"
+              class="meetup__aside-button"
+              @click="handleAttendMeetup"
+              :disabled="disabled"
+            >
+              Участвовать
+            </UiButton>
           </div>
         </div>
       </div>
@@ -29,6 +61,12 @@ import MeetupCover from './MeetupCover.vue';
 import MeetupInfo from './MeetupInfo.vue';
 import UiContainer from './UiContainer.vue';
 import UiButton from './UiButton.vue';
+import { useAuthStore } from '../stores/useAuthStore';
+import { useRouter } from 'vue-router'
+import { useApi } from '../composables/useApi';
+import { attendMeetup, leaveMeetup, deleteMeetup } from '../api/meetupsApi';
+import { ref } from "vue";
+
 
 export default {
   name: 'MeetupView',
@@ -47,15 +85,40 @@ export default {
     },
   },
 
-  setup() {
-    // TODO: Добавить обработку кнопок, включая работу с API
-    /*
-      TODO: Добавить тосты при успешных операциях
-            - Митап удалён
-            - Сохранено
-            - Текст ошибки в случае ошибки на API
-     */
-    // TODO: Будет плюсом блокировать кнопку на время загрузки
+  setup(props) {
+      const authStore = useAuthStore();
+      const isAuthenticated = authStore.isAuthenticated;
+      const disabled = ref(false);
+      const attending = ref(!!props.meetup.attending);
+      const router = useRouter();
+
+      const handleDeleteMeetup = async () => {
+          const { request, result, isLoading } = useApi(deleteMeetup, { showProgress: true, successToast: 'Митап удалён'});
+          disabled.value = isLoading.value;
+          await request(props.meetup.id);
+          if (result.value.success) {
+              router.push({ name: 'meetups' });
+          }
+          disabled.value = isLoading.value;
+      };
+
+      const handleAttendMeetup = async () => {
+          const { request, result, isLoading } = useApi(attending.value ? leaveMeetup : attendMeetup, { showProgress: true, successToast: 'Сохранено'});
+          disabled.value = isLoading.value;
+          await request(props.meetup.id);
+          if (result.value.success) {
+              attending.value = !attending.value;
+          }
+          disabled.value = isLoading.value;
+      };
+
+      return {
+          isAuthenticated,
+          handleDeleteMeetup,
+          handleAttendMeetup,
+          attending,
+          disabled
+      }
   },
 };
 </script>
