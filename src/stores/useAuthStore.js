@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
-import { loginUser, getUser } from '../api/authApi';
+import { loginUser, getUser, logoutUser } from '../api/authApi';
 import { setUserToLocalStorage, getUserFromLocalStorage, deleteUserFromLocalStorage } from '../services/authService';
 
 export const useAuthStore = defineStore('auth', () => {
@@ -27,11 +27,20 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
+  const logout = async () => {
+    const result = await logoutUser();
+    if (result.success) {
+      setUser(null);
+      deleteUserFromLocalStorage();
+    }
+  };
+
   return {
     user,
     isAuthenticated,
     setUser,
     getCurrentUser,
     login,
+    logout,
   };
 });

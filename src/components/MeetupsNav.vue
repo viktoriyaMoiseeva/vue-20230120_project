@@ -19,9 +19,9 @@
         Организуемые митапы
       </RouterLink>
       <RouterLink :to="{ name: 'meetups-create' }" class="nav__link">Создать митап</RouterLink>
-    </template>
 
-    <a href="#" class="nav__link">fullname (выйти)</a>
+      <a href="#" class="nav__link" @click.prevent="logout()">{{ user.fullname }} (выйти)</a>
+    </template>
     <!-- Ссылка - не часть проекта -->
     <RouterLink to="/demo" class="nav__link">🎨 Components Demo</RouterLink>
   </nav>
@@ -36,10 +36,17 @@ export default {
 
   setup() {
     const authStore = useAuthStore();
-    const { isAuthenticated } = storeToRefs(authStore);
+    const { isAuthenticated, user } = storeToRefs(authStore);
+
+    const logout = async () => {
+      await authStore.logout();
+      location.reload();
+    };
 
     return {
       isAuthenticated,
+      user,
+      logout,
     };
   },
 };
