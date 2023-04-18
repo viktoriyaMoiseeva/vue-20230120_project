@@ -1,5 +1,5 @@
 <template>
-  <layout-meetup-form title="Редактирование митапа">
+  <layout-meetup-form title="Создание митапа">
     <MeetupForm :meetup="meetup" @submit="submit" @cancel="cancel" />
   </layout-meetup-form>
 </template>
@@ -33,9 +33,8 @@ export default {
         errorToast: true,
       });
       await request(data);
-      const response = await result.value.data;
       if (result.value.success) {
-        router.push({ name: 'meetup', meetupId: response.id });
+        router.push({ name: 'meetup', params: { meetupId: result.value.data.id } });
       }
     };
 

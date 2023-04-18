@@ -97,6 +97,7 @@ export default {
       await request(props.meetup.id);
       if (result.value.success) {
         router.push({ name: 'meetups' });
+        location.reload();
       }
       disabled.value = isLoading.value;
     };
