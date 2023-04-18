@@ -57,7 +57,7 @@ export function useApi(apiFunc, { showProgress = false, successToast = false, er
     }
 
     if (result.value.error && errorToast) {
-      toaster.error(typeof errorToast === 'string' ? errorToast : result.value.error);
+      toaster.error(typeof errorToast === 'string' ? errorToast : result.value.error.message);
     }
   };
 
