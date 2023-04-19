@@ -12,6 +12,7 @@ import { createMeetup } from '../services/meetupService.js';
 import { postMeetup } from '../api/meetupsApi';
 import { useRouter } from 'vue-router';
 import { useApi } from '../composables/useApi';
+import { useImageApi } from '../composables/useImageApi';
 
 export default {
   name: 'PageCreateMeetup',
@@ -27,6 +28,12 @@ export default {
     const router = useRouter();
 
     const submit = async (data) => {
+      if (data.imageToUpload) {
+        const { result } = await useImageApi(data.imageToUpload);
+        data.image = result.value.data.image;
+        data.imageId = result.value.data.id;
+      }
+
       const { request, result } = useApi(postMeetup, {
         showProgress: true,
         successToast: 'Сохранено',

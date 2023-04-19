@@ -16,6 +16,7 @@ import LayoutMeetupForm from '../components/LayoutMeetupForm.vue';
 import { getMeetup, putMeetup } from '../api/meetupsApi';
 import { useRouter } from 'vue-router';
 import { useApi } from '../composables/useApi';
+import { useImageApi } from '../composables/useImageApi';
 
 export default {
   name: 'PageEditMeetup',
@@ -66,6 +67,12 @@ export default {
     const router = useRouter();
 
     const submit = async (data) => {
+      if (data.imageToUpload) {
+        const { result } = await useImageApi(data.imageToUpload);
+        data.image = result.value.data.image;
+        data.imageId = result.value.data.id;
+      }
+
       const { request, result } = useApi(putMeetup, { showProgress: true, successToast: 'Сохранено' });
       await request(data);
       if (result.value.success) {
