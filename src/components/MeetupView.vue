@@ -65,7 +65,7 @@ import { useAuthStore } from '../stores/useAuthStore';
 import { useRouter } from 'vue-router';
 import { useApi } from '../composables/useApi';
 import { attendMeetup, leaveMeetup, deleteMeetup } from '../api/meetupsApi';
-import { ref } from 'vue';
+import { ref, onUpdated } from 'vue';
 
 export default {
   name: 'MeetupView',
@@ -88,8 +88,12 @@ export default {
     const authStore = useAuthStore();
     const isAuthenticated = authStore.isAuthenticated;
     const disabled = ref(false);
-    const attending = ref(!!props.meetup.attending);
+    const attending = ref(props.meetup.attending);
     const router = useRouter();
+
+    onUpdated(() => {
+      attending.value = props.meetup.attending;
+    });
 
     const handleDeleteMeetup = async () => {
       const { request, result, isLoading } = useApi(deleteMeetup, { showProgress: true, successToast: 'Митап удалён' });
@@ -110,7 +114,7 @@ export default {
       disabled.value = isLoading.value;
       await request(props.meetup.id);
       if (result.value.success) {
-        attending.value = !attending.value;
+        attending.value = !props.meetup.attending;
       }
       disabled.value = isLoading.value;
     };
